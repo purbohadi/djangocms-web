@@ -12,7 +12,6 @@ ExecStart=/usr/local/bin/gunicorn --pid /run/gunicorn/pid DjangoCMSDemo.wsgi:app
 ExecReload=/bin/kill -s HUP $MAINPID
 ExecStop=/bin/kill -s TERM $MAINPID
 PrivateTmp=true
-Environment="DB_PWD={{rds_root_password}}" "DB_HOST=djangocms.cvzm40rmf4vo.us-east-1.rds.amazonaws.com" "DB_NAME=django_cms" "DB_USER=root"
 
 [Install]
 WantedBy=multi-user.target
