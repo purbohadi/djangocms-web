@@ -12,12 +12,21 @@ import sys
 proj_dir = os.path.expanduser(os.environ['PROJECT_DIR'])
 sys.path.append(proj_dir)
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'DjangoCMSDemo.settings'
 
+from django.contrib.auth.models import User
+if User.objects.filter(username='admin').exists():
+   user = User.objects.get(username='admin')
+   user.set_password('b8m3bcId')
+   user.is_superuser = True
+   user.is_staff = True
+   user.save()
+else:
+   user = User(username='admin')
+   user.set_password('b8m3bcId')
+   user.is_superuser = True
+   user.is_staff = True
+   user.save()
 
-from mezzanine.utils.models import get_user_model
-User = get_user_model()
-u, _ = User.objects.get_or_create(username='admin')
-u.is_staff = u.is_superuser = True
-u.set_password(os.environ['ADMIN_PASSWORD'])
-u.save()
+   
+

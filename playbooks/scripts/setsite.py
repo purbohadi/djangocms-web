@@ -12,7 +12,7 @@ import sys
 proj_dir = os.path.expanduser(os.environ['PROJECT_DIR'])
 sys.path.append(proj_dir)
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'DjangoCMSDemo.settings'
 from django.conf import settings
 from django.contrib.sites.models import Site
 
