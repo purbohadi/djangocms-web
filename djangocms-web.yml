@@ -1,6 +1,8 @@
 ---
 - name: Deploy djangocms web
+
   hosts: web
+
   vars:
     user: "{{ ansible_ssh_user }}"
     mysql_root_pass: "{{ admin_pass }}"
@@ -11,23 +13,25 @@
     proj_path: "{{ venv_path }}/{{ proj_dirname }}"
     reqs_path: requirements.txt
     manage: "{{ python }} {{ proj_path }}/manage.py"
-    live_hostname: 192.168.100.50.xip.io
+    live_hostname: 192.168.33.11.xip.io
     domains:
-      - 192.168.100.50.xip.io
-      - www.192.168.100.50.xip.io
+      - 192.168.33.11.xip.io
+      - www.192.168.33.11.xip.io
     repo_url: git@github.com:purbohadi/DjangoCms.git
     gunicorn_port: 8000
     locale: en_US.UTF-8
     conf_path: /etc/nginx/conf
     tls_enabled: True
     python: "{{ venv_path }}/bin/python"
-    database_name: "{{ proj_name }}"
-    database_user: "{{ proj_name }}"
+    database_name: djangocms
+    database_user: djangocms
     database_host: localhost
     database_port: 3306
     gunicorn_proc_name: djangocms
+
   vars_files:
     - secrets.yml
+
   tasks:
     - name: install apt packages
       apt: pkg={{ item }} update_cache=yes cache_valid_time=3600
@@ -46,8 +50,9 @@
         - python-setuptools
         - python-virtualenv
         - supervisor
+        - libpq-dev
 
-    - name: Start MySQL service
+    - name: start mysql service
       sudo: yes
       service:
         name: mysql
@@ -96,8 +101,8 @@
         - mysql-python
         - gunicorn
         - setproctitle
-        - south
         - python-memcached
+        - south
 
     - name: install requirements.txt
       pip: requirements={{ proj_path }}/{{ reqs_path }} virtualenv={{ venv_path }}
@@ -116,13 +121,14 @@
         - syncdb
         - migrate
         - collectstatic
+#        - symlinkmedia
 
-#    - name: set the site id
-#      script: scripts/setsite.py
-#      environment:
-#        PATH: "{{ venv_path }}/bin"
-#        PROJECT_DIR: "{{ proj_path }}"
-#        WEBSITE_DOMAIN: "{{ live_hostname }}"
+    - name: set the site id
+      script: scripts/setsite.py
+      environment:
+        PATH: "{{ venv_path }}/bin"
+        PROJECT_DIR: "{{ proj_path }}"
+        WEBSITE_DOMAIN: "{{ live_hostname }}"
 
 #    - name: set the admin password
 #      script: scripts/setadmin.py
