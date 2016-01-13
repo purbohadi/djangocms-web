@@ -7,8 +7,9 @@ DjangoCMS site into a Vagrant box.
 
 Don't forget to do the following:
 
-    cd playbooks
-    cp secrets.yml.example secrets.yml
+    set the VagrantFile to fit your Vagrant configuration : private ip, box image os, etc.
+    The ssh key to clone from github is in the files folder, you need to copy it to vagrant machine to allow git clone.
+    You may also provide your own github setting.    		
 
 ## Running the playbook
 
@@ -18,8 +19,16 @@ Then you can deploy DjangoCMS by doing:
     ansible-playbook djangocms-web.yml
 
 
+Then point your browser to: <http://192.168.33.11.xip.io> 
 
-Then point your browser to: <http://192.168.33.11.xip.io> or
-<https://www.192.168.33.11.xip.io>. You'll get a security warning if you use the
-https site since it's a self-signed certificate, this is normal.
+To backup your sql data and site config, you can do this:
+    
+    ansible-playbook backup-rotation.yml
 
+The script will automate the process of backup if there are less than 7 successfull backup, if not it will delete the oldest backup files first.
+
+
+If you have any issue or feedback please dont hesitate to contact me @purboh.
+   
+
+Cheers

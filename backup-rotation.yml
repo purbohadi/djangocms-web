@@ -1,0 +1,28 @@
+---
+- name: Backup rotate djangocms web
+
+  hosts: web
+
+  vars:
+    user: "{{ ansible_ssh_user }}"
+    mysql_root_pass: "{{ admin_pass }}"
+    proj_name: djangocms
+    venv_home: "{{ ansible_env.HOME }}"
+    venv_path: "{{ venv_home }}/{{ proj_name }}"
+    proj_dirname: project
+    proj_path: "{{ venv_path }}/{{ proj_dirname }}"
+    reqs_path: requirements.txt
+    manage: "{{ python }} {{ proj_path }}/manage.py"
+
+  vars_files:
+    - secrets.yml
+
+  tasks:
+    - name: backup config and db
+      script: scripts/backuprotations.py      
+      environment:
+        PATH: "{{ venv_path }}/bin"
+        PROJECT_DIR: "{{ proj_path }}"
+        DATABASE_NAME: "{{ proj_name }}"
+        DATABASE_USER: "{{ proj_name }}"
+        DATABASE_PASSWORD: "{{ mysql_root_password }}" 

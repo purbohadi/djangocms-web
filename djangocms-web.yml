@@ -121,7 +121,6 @@
         - syncdb
         - migrate
         - collectstatic
-#        - symlinkmedia
 
     - name: set the site id
       script: scripts/setsite.py
@@ -130,12 +129,12 @@
         PROJECT_DIR: "{{ proj_path }}"
         WEBSITE_DOMAIN: "{{ live_hostname }}"
 
-#    - name: set the admin password
-#      script: scripts/setadmin.py
-#      environment:
-#        PATH: "{{ venv_path }}/bin"
-#        PROJECT_DIR: "{{ proj_path }}"
-#        ADMIN_PASSWORD: "{{ admin_pass }}"
+    - name: set the admin password
+      script: scripts/setadmin.py
+      environment:
+        PATH: "{{ venv_path }}/bin"
+        PROJECT_DIR: "{{ proj_path }}"
+        ADMIN_PASSWORD: "{{ admin_pass }}"
 
     - name: set the gunicorn config file
       template: src=templates/gunicorn.conf.py.j2 dest={{ proj_path }}/gunicorn.conf.py
